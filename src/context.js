@@ -39,9 +39,15 @@ export class RoomProvider extends Component {
     });
     return tempItems;
   }
+
+  getRoom = slug => {
+    let tempRooms = [...this.state.rooms];
+    const room = tempRooms.find(room => room.slug === slug);
+    return room;
+  };
   render() {
     return (
-      <RoomContext.Provider value={{ ...this.state }}>
+      <RoomContext.Provider value={{ ...this.state, getRoom: this.getRoom }}>
         {this.props.children}
       </RoomContext.Provider>
     );
@@ -51,3 +57,4 @@ export class RoomProvider extends Component {
 export const RoomComsumer = RoomContext.Consumer;
 
 export default { RoomProvider, RoomContext, RoomComsumer };
+//setting a method in state available through context
