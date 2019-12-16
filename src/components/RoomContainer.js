@@ -11,10 +11,10 @@ const RoomContainer = ({ context }) => {
   }
   console.log(sortedRooms);
   return (
-    <div>
+    <>
       <RoomFilter rooms={rooms} />
       <RoomList rooms={sortedRooms} />
-    </div>
+    </>
   );
 };
 
