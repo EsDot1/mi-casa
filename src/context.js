@@ -54,7 +54,19 @@ export class RoomProvider extends Component {
   }
 }
 
-export const RoomComsumer = RoomContext.Consumer;
+export const RoomConsumer = RoomContext.Consumer;
 
-export default { RoomProvider, RoomContext, RoomComsumer };
+export function withRoomConsumer(Component) {
+  return function ConsumerWrapper(props) {
+    return (
+      <RoomConsumer>
+        {value => <Component {...props} context={value} />}
+      </RoomConsumer>
+    );
+  };
+  //props if the component you give to withRoomConsumer has its own props (e.g rooms below )
+  //<RoomFilter rooms={rooms}
+}
+
+export default { RoomProvider, RoomContext, RoomConsumer, withRoomConsumer };
 //setting a method in state available through context

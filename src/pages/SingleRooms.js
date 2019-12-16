@@ -44,14 +44,50 @@ export class SingleRooms extends Component {
       pets,
       images
     } = room;
+    const [mainImg, ...otherImgs] = images;
+    console.log(otherImgs);
     return (
-      <StyledHero img={images[0] || this.setState.defaultImg}>
-        <Banner title={`${name} room`}>
-          <Link to="/rooms" className="btn-primary">
-            back to rooms
-          </Link>
-        </Banner>
-      </StyledHero>
+      <>
+        <StyledHero img={mainImg || this.setState.defaultImg}>
+          <Banner title={`${name} room`}>
+            <Link to="/rooms" className="btn-primary">
+              back to rooms
+            </Link>
+          </Banner>
+        </StyledHero>
+        <section className="single-room">
+          <div className="single-room-images">
+            {otherImgs.map((item, index) => {
+              return <img key={index} src={item} alt="image" />;
+            })}
+          </div>
+          <div className="single-room-info">
+            <article className="desc">
+              <h3>details</h3>
+              <p>{description}</p>
+            </article>
+            <article className="info">
+              <h3>info</h3>
+              <h6>price : £{price}</h6>
+              <h6>size : {size} SQFT</h6>
+              <h6>
+                max capacity :{" "}
+                {capacity > 1 ? `${capacity} people` : `${capacity} person`}
+              </h6>
+              <h6>{pets ? `pets allowed` : `no pets allowed`}</h6>
+              <h6>{breakfast && `free breakfasr included`}</h6>
+            </article>
+          </div>
+        </section>
+        <section className="room-extras">
+          <h6>extras</h6>
+          <ul className="extras">
+            {extras.map((item, index) => {
+              return <li key={index}>- {item}</li>;
+            })}
+          </ul>
+        </section>
+      </>
     );
   }
 }
@@ -75,4 +111,6 @@ class SingleRooms extends React.Component{
 use match properties to identify object and its details the page should show 
 
 capture that value from match and intialise  state  and store value 
+
+conditional rendering content withing hard coded elements
 */
