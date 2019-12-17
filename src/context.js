@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import items from "./data";
+// import items from "./data";
+import Client from "./contentful";
 
 export const RoomContext = React.createContext();
 //component object
@@ -23,26 +24,39 @@ export class RoomProvider extends Component {
     //type onwards names of form input fields in filter
   };
 
-  //getData
+  getData = async () => {
+    try {
+      let response = await Client.getEntries({
+        content_type: "micasa",
+        //order:'sys.createdAt
+        //or price --> ascending = order: "fields.price"
+        order: "-fields.price"
+      });
+      let rooms = this.formatData(response.items);
+      // ---> rooms now has contentful data -->after this we have our formatted data
+      let featuredRooms = rooms.filter(room => room.featured === true);
+
+      let maxPrice = Math.max(...rooms.map(item => item.price));
+      let maxSize = Math.max(...rooms.map(item => item.size));
+
+      this.setState({
+        rooms,
+        sortedRooms: rooms,
+        featuredRooms: featuredRooms,
+        loading: false,
+        price: maxPrice,
+        maxPrice: maxPrice,
+        maxSize: maxSize
+        //of true no rendering ---> laoder can run
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   componentDidMount() {
-    //getData() ---> run 1st
-    let rooms = this.formatData(items);
-    // ---> after this we have our formatted data
-    let featuredRooms = rooms.filter(room => room.featured === true);
-
-    let maxPrice = Math.max(...rooms.map(item => item.price));
-    let maxSize = Math.max(...rooms.map(item => item.size));
-
-    this.setState({
-      rooms,
-      sortedRooms: rooms,
-      featuredRooms: featuredRooms,
-      loading: false,
-      price: maxPrice,
-      maxPrice: maxPrice,
-      maxSize: maxSize
-      //of true no rendering ---> laoder can run
-    });
+    //call to fetch data
+    this.getData();
   }
   formatData(items) {
     let tempItems = items.map(item => {
@@ -172,5 +186,8 @@ export default { RoomProvider, RoomContext, RoomConsumer, withRoomConsumer };
  ---> input value involved ---> value recorded
  checkbx value is --> ebent.target.checked
 
-
+DATA
+Data you will receive will have its own shape 
+you might need to format the data before using --> [{...},{...},{...}] best way to map() out lists or run filter()
+any nested arrays being a property inside each object element 
  */
